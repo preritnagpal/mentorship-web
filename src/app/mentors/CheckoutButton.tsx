@@ -20,7 +20,6 @@ export default function CheckoutButton({
     serviceName,
     price,
 }: CheckoutButtonProps) {
-
     const { isSignedIn } = useAuth();
     const { openSignIn } = useClerk();
 
@@ -57,12 +56,11 @@ export default function CheckoutButton({
         toast.error("Please login to book");
 
         openSignIn({
-            redirectUrl: "/mentors"
+            redirectUrl: "/mentors",
         });
     };
 
     const handlePayment = async () => {
-
         if (!isSignedIn) {
             redirectToLogin();
             return;
@@ -76,7 +74,6 @@ export default function CheckoutButton({
         setLoading(true);
 
         try {
-
             const res = await fetch("/api/bookings", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -103,9 +100,29 @@ export default function CheckoutButton({
                 description: serviceName,
                 order_id: data.orderId,
 
-                handler: function () {
-                    toast.success("Payment Successful");
-                    window.location.href = "/dashboard?payment=success";
+                handler: async function (response: any) {
+                    try {
+                        await fetch("/api/verify-payment", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                bookingId: data.bookingId,
+                            }),
+                        });
+
+                        toast.success("Payment Successful");
+
+                        window.location.href = "/dashboard?payment=success";
+                    } catch (err) {
+                        console.error("Payment verification failed");
+
+                        toast.error("Payment verified but booking update failed");
+
+                        window.location.href = "/dashboard";
+                    }
                 },
 
                 prefill: {
@@ -127,7 +144,6 @@ export default function CheckoutButton({
             });
 
             rzp.open();
-
         } catch (err: any) {
             toast.error(err.message);
         }
@@ -199,7 +215,7 @@ export default function CheckoutButton({
                                                         key={date}
                                                         onClick={() => setSelectedDate(date)}
                                                         className={`flex flex-col items-center justify-center p-3 rounded-lg border min-w-[70px]
-                            ${selectedDate === date
+                                                            ${selectedDate === date
                                                                 ? "bg-indigo-600 text-white"
                                                                 : "bg-white"
                                                             }`}
@@ -229,7 +245,7 @@ export default function CheckoutButton({
                                                     key={time}
                                                     onClick={() => setSelectedTime(time)}
                                                     className={`p-2 border rounded-lg text-sm
-                          ${selectedTime === time
+                                                            ${selectedTime === time
                                                             ? "bg-indigo-600 text-white"
                                                             : ""
                                                         }`}
