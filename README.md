@@ -43,17 +43,24 @@ Inside `.env.local`, you must populate the following critical keys:
 
 ```env
 # MongoDB
-MONGODB_URI=mongodb+srv://ayushsinghce:Ayushce%401@backendlearningcluster.xtoupdp.mongodb.net/
+MONGODB_URI=
 
 # Clerk Auth
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_bWFnaWNhbC1kcmFrZS05OS5jbGVyay5hY2NvdW50cy5kZXYk
-CLERK_SECRET_KEY=sk_test_kmnqxqiOo41Rw0qYm3L9MboS6hfekkI1amOTUaIuhJ
-CLERK_WEBHOOK_SECRET=whsec_reZR6pjYh9N8Igg68bWmV2sOT3NPuq1f
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+CLERK_WEBHOOK_SECRET=
 
 # Razorpay
 RAZORPAY_KEY_ID=rzp_test_...  
-RAZORPAY_KEY_SECRET=...     
+RAZORPAY_KEY_SECRET=...
+NEXT_PUBLIC_RAZORPAY_KEY_ID=
 RAZORPAY_WEBHOOK_SECRET=rzp_webhook_secret
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+
+SMTP_USER=
+SMTP_PASS=
 
 # Brevo (Email)
 BREVO_API_KEY=xkeysib-...
